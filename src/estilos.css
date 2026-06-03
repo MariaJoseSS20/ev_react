@@ -244,6 +244,10 @@ body {
   background-image: none !important;
 }
 
+#filtroCategoriaVentas {
+  min-width: 10.5rem;
+}
+
 #formVenta.was-validated #filtroCategoriaVentas {
   border-color: var(--bs-border-color);
   box-shadow: none;

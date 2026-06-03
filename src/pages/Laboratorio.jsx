@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { calcularEdad, descripcionEdad } from '../utils/edad';
 import {
   cifrarTexto,
@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export default function Laboratorio() {
   const [fechaNac, setFechaNac] = useState('');
-  const [edad, setEdad] = useState(null);
+  const edad = useMemo(() => calcularEdad(fechaNac), [fechaNac]);
   const [textoPlano, setTextoPlano] = useState('');
   const [textoCifrado, setTextoCifrado] = useState('');
   const [historial, setHistorial] = useState([]);
@@ -24,10 +24,6 @@ export default function Laboratorio() {
   useEffect(() => {
     recargarHistorial();
   }, []);
-
-  function calcularEdadClick() {
-    setEdad(calcularEdad(fechaNac));
-  }
 
   function cifrarYGuardar() {
     if (!textoPlano.trim()) return;
@@ -59,28 +55,21 @@ export default function Laboratorio() {
       <section className="card p-3 mb-4">
         <h2 className="h5 mb-3">Algoritmo: calcular edad</h2>
         <p className="small text-muted">
-          Ingresa la fecha de nacimiento; el algoritmo calcula los años cumplidos considerando mes y
-          día respecto a la fecha actual.
+          Elige la fecha de nacimiento en el calendario; la edad se calcula al instante con el
+          algoritmo (años cumplidos según mes y día respecto a hoy).
         </p>
-        <div className="row g-3 align-items-end">
-          <div className="col-md-5">
-            <label htmlFor="fechaNacimiento" className="form-label">
-              Fecha de nacimiento
-            </label>
-            <input
-              id="fechaNacimiento"
-              type="date"
-              className="form-control"
-              value={fechaNac}
-              max={new Date().toISOString().slice(0, 10)}
-              onChange={(e) => setFechaNac(e.target.value)}
-            />
-          </div>
-          <div className="col-md-3">
-            <button type="button" className="btn btn-success w-100" onClick={calcularEdadClick}>
-              Calcular edad
-            </button>
-          </div>
+        <div className="col-md-6 col-lg-5 px-0">
+          <label htmlFor="fechaNacimiento" className="form-label">
+            Fecha de nacimiento
+          </label>
+          <input
+            id="fechaNacimiento"
+            type="date"
+            className="form-control"
+            value={fechaNac}
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => setFechaNac(e.target.value)}
+          />
         </div>
         {fechaNac && (
           <p className="mt-3 mb-0">
@@ -88,7 +77,7 @@ export default function Laboratorio() {
               <span className="text-danger">Fecha inválida o futura.</span>
             ) : (
               <>
-                Edad: <strong>{descripcionEdad(edad)}</strong> ({edad} años completos)
+                Edad: <strong>{descripcionEdad(edad)}</strong>
               </>
             )}
           </p>
