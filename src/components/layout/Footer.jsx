@@ -75,14 +75,6 @@ export default function Footer() {
                     Diagrama de clases
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    className="nav-link px-0 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover"
-                    to="/diagrama-casos-uso"
-                  >
-                    Casos de uso
-                  </Link>
-                </li>
               </ul>
             </nav>
           </div>

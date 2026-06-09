@@ -45,7 +45,7 @@ export default function Navbar() {
             <div className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="/#explora"
+                href="#explora"
                 id="navExploraSitio"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -63,11 +63,6 @@ export default function Navbar() {
                 <li>
                   <Link className="dropdown-item" to="/diagrama-clases">
                     Diagrama de clases
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/diagrama-casos-uso">
-                    Casos de uso
                   </Link>
                 </li>
               </ul>

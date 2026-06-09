@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 export default function DiagramaClases() {
   return (
     <main className="container py-4">
@@ -14,11 +12,10 @@ export default function DiagramaClases() {
           />
         </figure>
       </section>
-      <p className="small text-muted mb-3">
+      <p className="small text-muted mb-0">
         Clases principales: Cliente, Producto, Pedido, DetallePedido y Carrito (persistencia en
         localStorage para clientes con RUT cifrado en AES).
       </p>
-      <Link to="/diagrama-casos-uso">Ir a casos de uso</Link>
     </main>
   );
 }

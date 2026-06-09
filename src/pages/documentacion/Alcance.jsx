@@ -11,7 +11,7 @@ export default function Alcance() {
         <ul>
           <li>Actividad 1: validaciones, RUT, CRUD y cifrado del RUT con crypto-js.</li>
           <li>Actividad 2: API externa y cálculos en pesos chilenos.</li>
-          <li>Actividad 3: diagrama de clases y casos de uso.</li>
+          <li>Actividad 3: diagrama de clases, algoritmo de edad y cifrado del RUT.</li>
         </ul>
       </div>
     </main>
