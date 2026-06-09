@@ -1,15 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Contacto from './pages/Contacto';
-import QuienesSomos from './pages/QuienesSomos';
-import Terminos from './pages/Terminos';
-import Alcance from './pages/Alcance';
-import DiagramaClases from './pages/DiagramaClases';
-import DiagramaCasosUso from './pages/DiagramaCasosUso';
-import CrudClientes from './pages/CrudClientes';
-import Indicadores from './pages/Indicadores';
-import Laboratorio from './pages/Laboratorio';
+import Layout from './components/layout/Layout';
+import Home from './pages/sitio/Home';
+import Contacto from './pages/sitio/Contacto';
+import QuienesSomos from './pages/sitio/QuienesSomos';
+import Terminos from './pages/sitio/Terminos';
+import Alcance from './pages/documentacion/Alcance';
+import DiagramaClases from './pages/documentacion/DiagramaClases';
+import DiagramaCasosUso from './pages/documentacion/DiagramaCasosUso';
+import CrudClientes from './pages/actividades/CrudClientes';
+import Indicadores from './pages/actividades/Indicadores';
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
           <Route path="/diagrama-casos-uso" element={<DiagramaCasosUso />} />
           <Route path="/clientes" element={<CrudClientes />} />
           <Route path="/indicadores" element={<Indicadores />} />
-          <Route path="/laboratorio" element={<Laboratorio />} />
         </Routes>
       </Layout>
     </BrowserRouter>

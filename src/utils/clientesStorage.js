@@ -1,6 +1,8 @@
+import { cifrarRut, descifrarRut } from './cifrado';
+
 const STORAGE_CLIENTES = 'pescaderia_clientes_crud';
 
-export function listarClientes() {
+function listarClientesCrudos() {
   try {
     const raw = localStorage.getItem(STORAGE_CLIENTES);
     return raw ? JSON.parse(raw) : [];
@@ -13,30 +15,53 @@ export function guardarClientes(lista) {
   localStorage.setItem(STORAGE_CLIENTES, JSON.stringify(lista));
 }
 
+/** Listado con RUT tal como está almacenado (cifrado AES). */
+export function listarClientes() {
+  return listarClientesCrudos();
+}
+
 export function crearCliente(datos) {
-  const lista = listarClientes();
-  const nuevo = { id: Date.now(), ...datos };
+  const lista = listarClientesCrudos();
+  const nuevo = {
+    id: Date.now(),
+    nombre: datos.nombre,
+    email: datos.email,
+    telefono: datos.telefono,
+    fechaNacimiento: datos.fechaNacimiento,
+    rut: cifrarRut(datos.rut),
+  };
   lista.push(nuevo);
   guardarClientes(lista);
   return nuevo;
 }
 
 export function actualizarCliente(id, datos) {
-  const lista = listarClientes().map((c) => (c.id === id ? { ...c, ...datos, id } : c));
+  const lista = listarClientesCrudos().map((c) =>
+    c.id === id
+      ? {
+          ...c,
+          nombre: datos.nombre,
+          email: datos.email,
+          telefono: datos.telefono,
+          fechaNacimiento: datos.fechaNacimiento,
+          rut: cifrarRut(datos.rut),
+          id,
+        }
+      : c
+  );
   guardarClientes(lista);
   return lista.find((c) => c.id === id);
 }
 
 export function eliminarCliente(id) {
-  const lista = listarClientes().filter((c) => c.id !== id);
+  const lista = listarClientesCrudos().filter((c) => c.id !== id);
   guardarClientes(lista);
   return lista;
 }
 
+/** Para edición: devuelve el RUT descifrado en el formulario. */
 export function buscarClientePorId(id) {
-  const lista = listarClientes();
-  for (let i = 0; i < lista.length; i += 1) {
-    if (lista[i].id === id) return lista[i];
-  }
-  return null;
+  const cliente = listarClientesCrudos().find((c) => c.id === id);
+  if (!cliente) return null;
+  return { ...cliente, rut: descifrarRut(cliente.rut) };
 }
