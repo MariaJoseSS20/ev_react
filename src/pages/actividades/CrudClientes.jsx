@@ -14,6 +14,7 @@ import {
 } from '../../utils/edad';
 import { formatearFechaDDMMYYYY } from '../../utils/formato';
 import { validarRut, formatearRut, normalizarRut } from '../../utils/rut';
+import ModalConfirmacion from '../../components/ui/ModalConfirmacion';
 
 const FORM_VACIO = { nombre: '', rut: '', email: '', telefono: '', fechaNacimiento: '' };
 const ERRORES_VACIO = { nombre: '', rut: '', email: '', telefono: '', fechaNacimiento: '' };
@@ -26,6 +27,7 @@ export default function CrudClientes() {
   const [mostrarFormulario, setMostrarFormulario] = useState(true);
   const [mostrarTabla, setMostrarTabla] = useState(true);
   const [aviso, setAviso] = useState('');
+  const [idEliminar, setIdEliminar] = useState(null);
 
   const edadRegistro = useMemo(
     () => (form.fechaNacimiento ? validarEdadRegistro(form.fechaNacimiento) : null),
@@ -138,15 +140,16 @@ export default function CrudClientes() {
     setMostrarFormulario(true);
   }
 
-  function borrar(id) {
-    if (!window.confirm('¿Eliminar este cliente del almacenamiento local?')) return;
-    eliminarCliente(id);
-    if (editId === id) {
+  function confirmarEliminar() {
+    if (!idEliminar) return;
+    eliminarCliente(idEliminar);
+    if (editId === idEliminar) {
       setEditId(null);
       setForm(FORM_VACIO);
       setErrores(ERRORES_VACIO);
     }
     mostrarAviso('Cliente eliminado correctamente.');
+    setIdEliminar(null);
     recargar();
   }
 
@@ -172,7 +175,7 @@ export default function CrudClientes() {
           <button type="button" className="btn btn-sm btn-outline-primary me-1" onClick={() => editar(c.id)}>
             Editar
           </button>
-          <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => borrar(c.id)}>
+          <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => setIdEliminar(c.id)}>
             Eliminar
           </button>
         </td>
@@ -342,6 +345,17 @@ export default function CrudClientes() {
           {aviso}
         </div>
       )}
+
+      <ModalConfirmacion
+        id="modalEliminarCliente"
+        titulo="Eliminar cliente"
+        mensaje="¿Eliminar este cliente?"
+        visible={idEliminar != null}
+        onCerrar={() => setIdEliminar(null)}
+        onConfirmar={confirmarEliminar}
+        textoConfirmar="Eliminar"
+        variante="danger"
+      />
     </main>
   );
 }

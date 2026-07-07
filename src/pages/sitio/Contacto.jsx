@@ -17,7 +17,7 @@ export default function Contacto() {
       <div className="row g-4">
         <div className="col-lg-6">
           <section className="card p-3">
-            <h2 className="h5">Formulario simple</h2>
+            <h2 className="h5">Ingrese sus datos</h2>
             <form
               id="formContacto"
               onSubmit={(e) => {

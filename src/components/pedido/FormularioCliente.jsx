@@ -10,6 +10,7 @@ export default function FormularioCliente({ children }) {
           <input
             type="text"
             id="clienteNombre"
+            name="clienteNombre"
             className="form-control"
             required
             minLength={2}
@@ -21,7 +22,7 @@ export default function FormularioCliente({ children }) {
           <label htmlFor="clienteEmail" className="form-label">
             Correo
           </label>
-          <input type="email" id="clienteEmail" className="form-control" required maxLength={254} />
+          <input type="email" id="clienteEmail" name="clienteEmail" className="form-control" required maxLength={254} />
           <div className="invalid-feedback">Indica un correo válido.</div>
         </div>
         <p className="mb-1 fw-semibold">Tipo de cliente</p>

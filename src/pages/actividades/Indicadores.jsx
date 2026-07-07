@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 import { obtenerIndicador, convertirAPesos } from '../../utils/indicadores';
+import {
+  guardarConsultaIndicadores,
+  listarHistorialIndicadores,
+  eliminarConsultaIndicador,
+} from '../../utils/indicadoresStorage';
 import { clp, formatearFechaDDMMYYYY } from '../../utils/formato';
 
 const INDICADORES = [
@@ -14,6 +19,15 @@ export default function Indicadores() {
   const [error, setError] = useState('');
   const [cantidad, setCantidad] = useState('1');
   const [resultados, setResultados] = useState([]);
+  const [historial, setHistorial] = useState([]);
+
+  function recargarHistorial() {
+    setHistorial(listarHistorialIndicadores());
+  }
+
+  useEffect(() => {
+    recargarHistorial();
+  }, []);
 
   useEffect(() => {
     let activo = true;
@@ -53,6 +67,12 @@ export default function Indicadores() {
       });
     }
     setResultados(lista);
+    guardarConsultaIndicadores({
+      cantidad,
+      resultados: lista,
+      valoresApi: valores,
+    });
+    recargarHistorial();
   }
 
   return (
@@ -63,6 +83,7 @@ export default function Indicadores() {
         <a href="https://www.mindicador.cl/" target="_blank" rel="noopener noreferrer">
           mindicador.cl
         </a>
+        .
       </p>
 
       {cargando && <p className="text-muted">Cargando indicadores…</p>}
@@ -93,7 +114,7 @@ export default function Indicadores() {
             })}
           </div>
 
-          <section className="card p-3">
+          <section className="card p-3 mb-4">
             <h2 className="h5 mb-3">Calculadora</h2>
             <div className="row g-3 align-items-end">
               <div className="col-sm-6 col-md-4">
@@ -131,13 +152,39 @@ export default function Indicadores() {
             )}
           </section>
 
-          <p className="small text-muted mt-3 mb-0">
-            Referencia educativa similar a ejemplos de{' '}
-            <a href="https://www.w3schools.com/js/js_api_fetch.asp" target="_blank" rel="noopener noreferrer">
-              W3Schools (fetch API)
-            </a>
-            .
-          </p>
+          <section className="card p-3">
+            <h2 className="h5 mb-3">Historial de consultas</h2>
+            {historial.length === 0 ? (
+              <p className="text-muted mb-0">Aún no hay cálculos guardados.</p>
+            ) : (
+              <ul className="list-group list-group-flush">
+                {historial.map((h) => (
+                  <li key={h.id} className="list-group-item d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                      <strong>{formatearFechaDDMMYYYY(h.fecha)}</strong> — cantidad {h.cantidad}
+                      <ul className="small mb-0 mt-1">
+                        {h.resultados.map((r) => (
+                          <li key={`${h.id}-${r.etiqueta}`}>
+                            {r.etiqueta}: {r.pesos != null ? clp(r.pesos) : '—'}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => {
+                        eliminarConsultaIndicador(h.id);
+                        recargarHistorial();
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         </>
       )}
     </main>

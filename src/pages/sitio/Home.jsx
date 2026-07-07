@@ -1,21 +1,33 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Carrito from '../../components/pedido/Carrito';
+import CarruselDestacados from '../../components/pedido/CarruselDestacados';
 import CatalogoPedido from '../../components/pedido/CatalogoPedido';
 import CompartirPedido from '../../components/pedido/CompartirPedido';
 import FormularioCliente from '../../components/pedido/FormularioCliente';
-import { productos } from '../../data/productos';
+import ModalConfirmacion from '../../components/ui/ModalConfirmacion';
+import { buscarProducto, obtenerCatalogo } from '../../data/productos';
 import { useCarrito } from '../../hooks/useCarrito';
+import { totalCarrito } from '../../utils/carrito';
+import { guardarPedido } from '../../utils/pedidosStorage';
+import { clp } from '../../utils/formato';
 
 export default function Home() {
   const { carrito, agregar: agregarAlCarrito, quitar, vaciar, estaVacio } = useCarrito();
+  const [catalogo, setCatalogo] = useState(() => obtenerCatalogo());
   const [filtro, setFiltro] = useState('');
   const [validado, setValidado] = useState(false);
   const [mostrarVacio, setMostrarVacio] = useState(false);
+  const [modalPedido, setModalPedido] = useState(false);
+  const [resumenPedido, setResumenPedido] = useState('');
 
   const visibles = useMemo(
-    () => productos.filter((p) => !filtro || p.categoria === filtro),
-    [filtro]
+    () => catalogo.filter((p) => !filtro || p.categoria === filtro),
+    [catalogo, filtro]
   );
+
+  useEffect(() => {
+    setCatalogo(obtenerCatalogo());
+  }, []);
 
   function agregar(id, cant) {
     agregarAlCarrito(id, cant);
@@ -26,6 +38,55 @@ export default function Home() {
     setValidado(true);
     setMostrarVacio(estaVacio);
     return form.checkValidity() && !estaVacio;
+  }
+
+  function extraerDatosPedido(form) {
+    const fd = new FormData(form);
+    const items = carrito.map((linea) => {
+      const p = buscarProducto(linea.productoId);
+      return {
+        sku: p?.sku,
+        nombre: p?.nombre,
+        cantidad: linea.cantidad,
+        subtotal: p ? p.precio * linea.cantidad : 0,
+      };
+    });
+    return {
+      nombreCliente: String(fd.get('clienteNombre') || '').trim(),
+      email: String(fd.get('clienteEmail') || '').trim(),
+      tipoCliente: fd.get('tipo_cliente'),
+      despacho: fd.get('despacho'),
+      aceptaTerminos: form.aceptaTerminosVenta?.checked,
+      items,
+      total: totalCarrito(carrito),
+    };
+  }
+
+  function confirmarPedido(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (!validarPedido(form)) return;
+
+    const datos = extraerDatosPedido(form);
+    guardarPedido(datos);
+    setResumenPedido(
+      <>
+        <p className="mb-2">
+          Pedido registrado para <strong>{datos.nombreCliente}</strong>.
+        </p>
+        <p className="mb-2">
+          Total: <strong>{clp(datos.total)}</strong> ({datos.items.length} producto
+          {datos.items.length === 1 ? '' : 's'}).
+        </p>
+        <p className="mb-0 small text-muted">
+          Coordina la confirmación por WhatsApp o en el local. El pedido quedó guardado en el historial.
+        </p>
+      </>
+    );
+    setModalPedido(true);
+    vaciar();
+    setValidado(false);
+    form.reset();
   }
 
   return (
@@ -56,12 +117,7 @@ export default function Home() {
             id="formVenta"
             className={`card p-3 needs-validation${validado ? ' was-validated' : ''}`}
             noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (validarPedido(e.currentTarget)) {
-                alert('Pedido validado. Coordina la confirmación por WhatsApp o en el local.');
-              }
-            }}
+            onSubmit={confirmarPedido}
           >
             <FormularioCliente>
               <CatalogoPedido
@@ -80,6 +136,20 @@ export default function Home() {
           <CompartirPedido carrito={carrito} />
         </div>
       </div>
+
+      <CarruselDestacados productos={catalogo} />
+
+      <ModalConfirmacion
+        id="modalConfirmarPedido"
+        titulo="Pedido confirmado"
+        mensaje={resumenPedido}
+        visible={modalPedido}
+        onCerrar={() => setModalPedido(false)}
+        onConfirmar={() => setModalPedido(false)}
+        textoConfirmar="Entendido"
+        variante="success"
+        mostrarCancelar={false}
+      />
     </main>
   );
 }

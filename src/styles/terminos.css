@@ -1,0 +1,122 @@
+.terminos-page h1 {
+  color: #063540;
+}
+
+.terminos-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.terminos-tab {
+  border: 1px solid rgba(10, 79, 95, 0.2);
+  background: #fff;
+  color: #0a4f5f;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.terminos-tab:hover {
+  background: rgba(42, 157, 143, 0.12);
+}
+
+.terminos-tab.active {
+  background: #0a4f5f;
+  border-color: #0a4f5f;
+  color: #fff;
+}
+
+/* Bootstrap */
+.terminos-bootstrap .card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.terminos-bootstrap .card-header {
+  font-size: 1rem;
+}
+
+.terminos-bootstrap .card-text {
+  color: #334155;
+  line-height: 1.6;
+}
+
+/* Materialize (estilo aislado, sin CDN) */
+.terminos-materialize .mat-panel {
+  background: #e0f2f1;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  padding: 1.25rem 1.5rem;
+}
+
+.terminos-materialize .mat-titulo {
+  display: block;
+  color: #00695c;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.terminos-materialize .mat-texto {
+  color: #546e7a;
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+
+.terminos-materialize .mat-btn {
+  display: inline-block;
+  background: #00897b;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  padding: 0.55rem 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Bulma (estilo aislado, sin CDN) */
+.terminos-bulma .bulma-message {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+}
+
+.terminos-bulma .bulma-message-header {
+  background: #3e8ed0;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+}
+
+.terminos-bulma .bulma-message-body {
+  padding: 1rem 1.1rem 1.1rem;
+  color: #363636;
+  line-height: 1.6;
+}
+
+.terminos-bulma .bulma-message-body p {
+  margin-bottom: 0.75rem;
+}
+
+.terminos-bulma .bulma-btn {
+  display: inline-block;
+  background: #eff5fb;
+  color: #296fa8;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.9;
+}

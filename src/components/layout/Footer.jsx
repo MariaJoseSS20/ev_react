@@ -62,17 +62,33 @@ export default function Footer() {
                 <li>
                   <Link
                     className="nav-link px-0 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover"
-                    to="/alcance"
+                    to="/manual"
                   >
-                    Alcance
+                    Manual de usuario
                   </Link>
                 </li>
                 <li>
                   <Link
                     className="nav-link px-0 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover"
-                    to="/diagrama-clases"
+                    to="/productos"
                   >
-                    Diagrama de clases
+                    Productos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="nav-link px-0 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover"
+                    to="/pedidos"
+                  >
+                    Pedidos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="nav-link px-0 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover"
+                    to="/alcance"
+                  >
+                    Alcance
                   </Link>
                 </li>
               </ul>
