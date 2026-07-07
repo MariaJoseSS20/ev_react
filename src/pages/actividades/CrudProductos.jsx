@@ -18,6 +18,15 @@ const FORM_VACIO = {
 };
 const ERRORES_VACIO = { sku: '', nombre: '', precio: '', imagen: '' };
 
+function esUrlImagenValida(url) {
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 export default function CrudProductos() {
   const [productos, setProductos] = useState([]);
   const [form, setForm] = useState(FORM_VACIO);
@@ -65,6 +74,9 @@ export default function CrudProductos() {
     }
     if (!form.imagen.trim()) {
       nuevos.imagen = 'Indica la URL de la imagen.';
+      ok = false;
+    } else if (!esUrlImagenValida(form.imagen)) {
+      nuevos.imagen = 'La URL debe comenzar con http:// o https://.';
       ok = false;
     }
     setErrores(nuevos);
@@ -180,16 +192,12 @@ export default function CrudProductos() {
               </label>
               <input
                 id="prodImg"
+                type="url"
                 className={`form-control${errores.imagen ? ' is-invalid' : ''}`}
                 value={form.imagen}
                 onChange={(e) => onChange('imagen', e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
               />
-              <p className="form-text mb-0">
-                Sugerencia{' '}
-                <a href="https://unsplash.com/es/images" target="_blank" rel="noopener noreferrer">
-                  https://unsplash.com/es/images
-                </a>
-              </p>
               <div className="invalid-feedback d-block">{errores.imagen}</div>
               {form.imagen.trim() && (
                 <div className="mt-2">
